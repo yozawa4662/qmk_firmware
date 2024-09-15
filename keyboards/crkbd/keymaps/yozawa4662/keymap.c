@@ -16,36 +16,15 @@ extern uint8_t is_master;
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
-// #define _ADJUST 3
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE
-  /* ADJUST, */
-  /* BACKLIT, */
-  /* RGBRST */
 };
 
 enum tap_dances {
-  // once CLEAR, twice RESET
-  CLRE_DANCE,
-  // once i, twice *
-  //ASTR_DANCE,
-  // once -, twice _
-  //MINS_DANCE,
-  // once =, twice +
-  //EQL_DANCE,
-  // once \, twice |
-  //BSLS_DANCE,
-  // once ', twice "
-  //QUOT_DANCE,
-  // once ;, twice :
-  //SCLN_DANCE,
-  // once [, twice {, thrice (
-  //LPRN_DANCE,
-  // once ], twice }, thrice )
-  //RPRN_DANCE
+  CLRE_DANCE
 };
 
 void dance_CLRE_finished (tap_dance_state_t *state, void *user_data) {
@@ -61,207 +40,23 @@ void dance_CLRE_finished (tap_dance_state_t *state, void *user_data) {
   }
 }
 
-// Double Tap Dance register
-/* void dance_DP_register (qk_tap_dance_state_t *state, uint8_t dp1, uint8_t dp2, uint8_t single) { */
-/*   if (state->count == 2) { */
-/*     register_code(dp1); */
-/*     register_code(dp2); */
-/*   } else { */
-/*     register_code(single); */
-/*   } */
-/* } */
-
-// Double Tap Dance unregister
-/* void dance_DP_unregister (qk_tap_dance_state_t *state, uint8_t dp1, uint8_t dp2, uint8_t single) { */
-/*   if (state->count == 2) { */
-/*     unregister_code(dp1); */
-/*     unregister_code(dp2); */
-/*   } else { */
-/*     unregister_code(single); */
-/*   } */
-/* } */
-
-// Double Tap finished
-/* void dance_DP_finished (qk_tap_dance_state_t *state, void *user_data) { */
-/*   switch (state->keycode) { */
-/*   case TD(ASTR_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_8, KC_I); */
-/*     break; */
-/*   case TD(MINS_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_MINS, KC_MINS); */
-/*     break; */
-/*   case TD(EQL_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_EQL, KC_EQL); */
-/*     break; */
-/*   case TD(BSLS_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_BSLS, KC_BSLS); */
-/*     break; */
-/*   case TD(QUOT_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_QUOT, KC_QUOT); */
-/*     break; */
-/*   case TD(SCLN_DANCE): */
-/*     dance_DP_register(state, KC_LSFT, KC_SCLN, KC_SCLN); */
-/*     break; */
-/*   } */
-/* } */
-
-// Double Tap reset
-/* void dance_DP_reset (qk_tap_dance_state_t *state, void *user_data) { */
-/*   switch (state->keycode) { */
-/*   case TD(ASTR_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_8, KC_I); */
-/*     break; */
-/*   case TD(MINS_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_MINS, KC_MINS); */
-/*     break; */
-/*   case TD(EQL_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_EQL, KC_EQL); */
-/*     break; */
-/*   case TD(BSLS_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_BSLS, KC_BSLS); */
-/*     break; */
-/*   case TD(QUOT_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_QUOT, KC_QUOT); */
-/*     break; */
-/*   case TD(SCLN_DANCE): */
-/*     dance_DP_unregister(state, KC_LSFT, KC_SCLN, KC_SCLN); */
-/*     break; */
-/*   } */
-/* } */
-
-/* void dance_PRN_tapped (qk_tap_dance_state_t *state, void *user_data) { */
-/*   switch (state->keycode) { */
-/*   case TD(LPRN_DANCE): */
-/*     if (state->count == 1) { */
-/*       // input [ during tapping */
-/*       register_code(KC_LBRC); */
-/*       unregister_code(KC_LBRC); */
-/*     } */
-/*     break; */
-/*   case TD(RPRN_DANCE): */
-/*     if (state->count == 1) { */
-/*       // input ] during tapping */
-/*       register_code(KC_RBRC); */
-/*       unregister_code(KC_RBRC); */
-/*     } */
-/*     break; */
-/*   } */
-/* } */
-
-/* void dance_PRN_finished (qk_tap_dance_state_t *state, void *user_data) { */
-/*   switch (state->keycode) { */
-/*   case TD(LPRN_DANCE): */
-/*     if (state->count % 3 == 2) { */
-/*       // delete [ and input { */
-/*       register_code (KC_BSPC); */
-/*       unregister_code (KC_BSPC); */
-/*       register_code(KC_LSFT); */
-/*       register_code(KC_LBRC); */
-/*     } else if (state->count % 3 == 0) { */
-/*       // delete [ and input ( */
-/*       register_code (KC_BSPC); */
-/*       unregister_code (KC_BSPC); */
-/*       register_code(KC_LSFT); */
-/*       register_code(KC_9); */
-/*     } */
-/*     break; */
-/*   case TD(RPRN_DANCE): */
-/*     if (state->count % 3 == 2) { */
-/*       // delete ] and input } */
-/*       register_code (KC_BSPC); */
-/*       unregister_code (KC_BSPC); */
-/*       register_code(KC_LSFT); */
-/*       register_code(KC_RBRC); */
-/*     } else if (state->count % 3 == 0) { */
-/*       // delete ] and input ) */
-/*       register_code (KC_BSPC); */
-/*       unregister_code (KC_BSPC); */
-/*       register_code(KC_LSFT); */
-/*       register_code(KC_0); */
-/*     } */
-/*     break; */
-/*   } */
-/* } */
-
-/* void dance_PRN_reset (qk_tap_dance_state_t *state, void *user_data) { */
-/*   switch (state->keycode) { */
-/*   case TD(LPRN_DANCE): */
-/*     if (state->count % 3 == 2) { */
-/*       unregister_code(KC_LSFT); */
-/*       unregister_code(KC_LBRC); */
-/*     } else if(state->count % 3 == 0) { */
-/*       unregister_code(KC_LSFT); */
-/*       unregister_code(KC_9); */
-/*     } */
-/*     break; */
-/*   case TD(RPRN_DANCE): */
-/*     if (state->count % 3 == 2) { */
-/*       unregister_code(KC_LSFT); */
-/*       unregister_code(KC_RBRC); */
-/*     } else if (state->count % 3 == 0) { */
-/*       unregister_code(KC_LSFT); */
-/*       unregister_code(KC_0); */
-/*     } */
-/*     break; */
-/*   } */
-/* } */
-
-// rarely taps TD
-//#define RARELY_TD_TIME 120
-// sometimes taps TD
-//#define SOMETIMES_TD_TIME 140
-// often taps TD
-//#define OFTEN_TD_TIME 170
-// usually taps TD
-#define USUALLY_TD_TIME 200
-// triple tap dance
-//#define TRIPLE_TD_TIME 160
-
 // All tap dance functions would go here. Only showing this one.
 tap_dance_action_t tap_dance_actions[] = {
   // double
   [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CLRE_finished, NULL)
-  //[CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_CLRE_finished, NULL, USUALLY_TD_TIME)
-  /* [ASTR_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, RARELY_TD_TIME), */
-  /* [MINS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME), */
-  /* [EQL_DANCE]  = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME), */
-  /* [BSLS_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, OFTEN_TD_TIME), */
-  /* [QUOT_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME), */
-  /* [SCLN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (NULL, dance_DP_finished, dance_DP_reset, SOMETIMES_TD_TIME), */
-  // triple
-  /* [LPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME), */
-  /* [RPRN_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED_TIME (dance_PRN_tapped, dance_PRN_finished, dance_PRN_reset, TRIPLE_TD_TIME) */
 };
 
 
-// double
-// #define SFT_SPC SFT_T(KC_SPC)
-// #define SFT_ENT SFT_T(KC_ENT)
+// modifiers
 #define CTL_SPC CTL_T(KC_SPC)
 #define CTL_ENT RCTL_T(KC_ENT)
 #define CTL_ESC CTL_T(KC_ESC)
 #define OSM_ALT OSM(MOD_LALT)
 #define OSM_SFT OSM(MOD_LSFT)
-// #define OSM_CTL OSM(MOD_LCTL)
 #define OSM_GUI OSM(MOD_LGUI)
 #define OSL_LOW OSL(_LOWER)
 #define OSL_RAI OSL(_RAISE)
-// #define OSL_QWE OSL(_QWERTY)
 #define TD_CLRE TD(CLRE_DANCE)
-/* #define TD_ASTR TD(ASTR_DANCE) */
-/* #define TD_MINS TD(MINS_DANCE) */
-/* #define TD_EQL  TD(EQL_DANCE) */
-/* #define TD_BSLS TD(BSLS_DANCE) */
-/* #define TD_QUOT TD(QUOT_DANCE) */
-/* #define TD_SCLN TD(SCLN_DANCE) */
-/* #define TD_LEFT TD(LEFT_DANCE) */
-/* #define TD_DOWN TD(DOWN_DANCE) */
-/* #define TD_UP   TD(UP_DANCE) */
-/* #define TD_RGHT TD(RGHT_DANCE) */
-
-// triple
-/* #define TD_LPRN TD(LPRN_DANCE) */
-/* #define TD_RPRN TD(RPRN_DANCE) */
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
@@ -300,18 +95,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           _______, _______, _______,    _______, _______, _______ \
                                       //`--------------------------'  `--------------------------'
   )
-
-  /* [_ADJUST] = LAYOUT( \ */
-  /* //,-----------------------------------------------------.                    ,-----------------------------------------------------. */
-  /*       RESET,  RGBRST, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,\ */
-  /* //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------| */
-  /*     RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,\ */
-  /* //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------| */
-  /*     RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,\ */
-  /* //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------| */
-  /*                                         KC_LGUI,   LOWER,  KC_SPC,     KC_ENT,   RAISE, KC_RALT \ */
-  /*                                     //`--------------------------'  `--------------------------' */
-  /* ) */
 };
 
 int RGB_current_mode;
@@ -320,15 +103,6 @@ void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
   default_layer_set(default_layer);
 }
-
-// Setting ADJUST layer RGB back to default
-/* void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) { */
-/*   if (IS_LAYER_ON(layer1) && IS_LAYER_ON(layer2)) { */
-/*     layer_on(layer3); */
-/*   } else { */
-/*     layer_off(layer3); */
-/*   } */
-/* } */
 
 void matrix_init_user(void) {
 #ifdef RGBLIGHT_ENABLE
@@ -347,10 +121,6 @@ void matrix_init_user(void) {
 const char *read_layer_state(void);
 void set_keylog(uint16_t keycode, keyrecord_t *record);
 const char *read_keylog(void);
-//const char *read_keylogs(void);
-
-//const char *read_mode_icon(bool swap);
-//const char *read_host_led_state(void);
 void set_timelog(void);
 const char *read_timelog(void);
 
@@ -371,13 +141,9 @@ const char *read_pikatyu(void) {
 
 void matrix_render_user(struct CharacterMatrix *matrix) {
   if (is_master) {
-    // If you want to change the display of OLED, you need to change here
     matrix_write_ln(matrix, read_layer_state());
     matrix_write_ln(matrix, read_timelog());
     matrix_write_ln(matrix, read_keylog());
-    //matrix_write_ln(matrix, read_keylogs());
-    //matrix_write_ln(matrix, read_mode_icon(keymap_config.swap_lalt_lgui));
-    //matrix_write_ln(matrix, read_host_led_state());
   }
   /* else { */
   /*   matrix_write(matrix, read_pikatyu()); */
@@ -413,60 +179,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         persistent_default_layer_set(1UL<<_QWERTY);
       }
       return false;
-    /* case LOWER: */
-    /*   if (record->event.pressed) { */
-    /*     layer_on(_LOWER); */
-    /*     //update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST); */
-    /*   } else { */
-    /*     layer_off(_LOWER); */
-    /*     //update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST); */
-    /*   } */
-    /*   return false; */
-    /* case RAISE: */
-    /*   // RAISE pressed and layer != RAISE, then change RAISE layer */
-    /*   if (record->event.pressed) { */
-    /*     layer_on(_RAISE); */
-    /*     //update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST); */
-    /*   } else { */
-    /*     layer_off(_RAISE); */
-    /*     //update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST); */
-    /*   } */
-    /*   return false; */
-    /* case ADJUST: */
-    /*     if (record->event.pressed) { */
-    /*       layer_on(_ADJUST); */
-    /*     } else { */
-    /*       layer_off(_ADJUST); */
-    /*     } */
-    /*     return false; */
-    /* case RGB_MOD: */
-    /*   #ifdef RGBLIGHT_ENABLE */
-    /*     if (record->event.pressed) { */
-    /*       rgblight_mode(RGB_current_mode); */
-    /*       rgblight_step(); */
-    /*       RGB_current_mode = rgblight_config.mode; */
-    /*     } */
-    /*   #endif */
-    /*   return false; */
-    /* case RGBRST: */
-    /*   #ifdef RGBLIGHT_ENABLE */
-    /*     if (record->event.pressed) { */
-    /*       eeconfig_update_rgblight_default(); */
-    /*       rgblight_enable(); */
-    /*       RGB_current_mode = rgblight_config.mode; */
-    /*     } */
-    /*   #endif */
-    /*   break; */
   }
   return true;
 }
 
 // TAPPING_TERM for each keycode
 // Tap Dances settings are in tap_dance_actions[]
+#define USUALLY_TD_TIME 200
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
   switch(keycode){
-//case SFT_SPC:
-//case SFT_ENT:
   case TD_CLRE:
     return USUALLY_TD_TIME;
   case CTL_ENT:
@@ -474,7 +195,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
     return 170;
   case CTL_ESC:
     return 120;
-  // 通常キーは80
+  // normal: 80
   default:
     return TAPPING_TERM;
   }
