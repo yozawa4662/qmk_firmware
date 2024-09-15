@@ -11,8 +11,8 @@ OLED_ENABLE = yes
         ./lib/host_led_state_reader.c \
         ./lib/timelogger.c \
 
-SRC += ./keymaps/awazoooo/lib/keylogger.c \
-       ./keymaps/awazoooo/lib/timelogger.c \
-       ./keymaps/awazoooo/lib/layer_state_reader.c
+SRC += ./lib/keylogger.c \
+       ./lib/timelogger.c \
+       ./lib/layer_state_reader.c
 
 TAP_DANCE_ENABLE = yes
