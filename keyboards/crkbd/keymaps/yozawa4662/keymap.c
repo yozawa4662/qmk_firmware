@@ -149,7 +149,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     set_timelog();
 #endif
   }
-
   switch (keycode) {
     case QWERTY:
       if (record->event.pressed) {
