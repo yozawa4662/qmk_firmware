@@ -95,16 +95,6 @@ void persistent_default_layer_set(uint16_t default_layer) {
   default_layer_set(default_layer);
 }
 
-void matrix_init_user(void) {
-#ifdef RGBLIGHT_ENABLE
-  RGB_current_mode = rgblight_config.mode;
-#endif
-  //SSD1306 OLED init, make sure to add #define SSD1306OLED in config.h
-#ifdef OLED_DRIVER_ENABLE
-  iota_gfx_init(!has_usb());   // turns on the display
-#endif
-}
-
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
 #ifdef SSD1306OLED
 
@@ -114,11 +104,6 @@ void set_keylog(uint16_t keycode, keyrecord_t *record);
 const char *read_keylog(void);
 void set_timelog(void);
 const char *read_timelog(void);
-
-void matrix_scan_user(void) {
-   iota_gfx_task();
-}
-
 const char *read_pikatyu(void) {
   static char logo[] =
     {
@@ -130,15 +115,15 @@ const char *read_pikatyu(void) {
   return logo;
 }
 
-void matrix_render_user(struct CharacterMatrix *matrix) {
-  if (is_master) {
-    matrix_write_ln(matrix, read_layer_state());
-    matrix_write_ln(matrix, read_timelog());
-    matrix_write_ln(matrix, read_keylog());
+bool oled_task_user(void) {
+  if (is_keyboard_master()) {
+    oled_write_ln(read_layer_state(), false);
+    oled_write_ln(read_timelog(), false);
+    oled_write_ln(read_keylog(), false);
+  } else {
+    oled_write_P(read_pikatyu(), false);
   }
-  /* else { */
-  /*   matrix_write(matrix, read_pikatyu()); */
-  /* } */
+  return false;
 }
 
 void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
