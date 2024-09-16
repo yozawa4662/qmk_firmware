@@ -27,12 +27,7 @@ enum tap_dances {
 
 void dance_CLRE_finished (tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
-    // clear Modifiers, Keys, Macros and Layers
-    clear_keyboard();
-    // clear OSM
-    clear_oneshot_mods();
-    // clear layer
-    layer_clear();
+    soft_reset_keyboard();
   } else {
     reset_keyboard();
   }
