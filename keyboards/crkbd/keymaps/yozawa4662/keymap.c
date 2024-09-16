@@ -106,7 +106,7 @@ void matrix_init_user(void) {
 }
 
 //SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
-#ifdef OLED_DRIVER_ENABLE
+#ifdef SSD1306OLED
 
 // When add source files to SRC in rules.mk, you can use functions.
 const char *read_layer_state(void);
@@ -158,7 +158,7 @@ void iota_gfx_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
-#ifdef OLED_DRIVER_ENABLE
+#ifdef SSD1306OLED
     set_keylog(keycode, record);
     set_timelog();
 #endif
