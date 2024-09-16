@@ -126,18 +126,19 @@ bool oled_task_user(void) {
   return false;
 }
 
-void matrix_update(struct CharacterMatrix *dest, const struct CharacterMatrix *source) {
-  if (memcmp(dest->display, source->display, sizeof(dest->display))) {
-    memcpy(dest->display, source->display, sizeof(dest->display));
-    dest->dirty = true;
+void oled_render_boot(bool bootloader) {
+  oled_clear();
+  if (bootloader) {
+    oled_write_P(PSTR("Boot Reset"), false);
+  } else {
+    oled_write_P(PSTR("Soft Reset"), false);
   }
+  oled_render_dirty(true);
 }
 
-void iota_gfx_task_user(void) {
-  struct CharacterMatrix matrix;
-  matrix_clear(&matrix);
-  matrix_render_user(&matrix);
-  matrix_update(&display, &matrix);
+bool shutdown_user(bool jump_to_bootloader) {
+  oled_render_boot(jump_to_bootloader);
+  return false;
 }
 #endif//SSD1306OLED
 
