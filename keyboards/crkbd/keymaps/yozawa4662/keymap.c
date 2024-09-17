@@ -43,7 +43,6 @@ tap_dance_action_t tap_dance_actions[] = {
 // modifiers
 #define CTL_SPC CTL_T(KC_SPC)
 #define CTL_ENT RCTL_T(KC_ENT)
-#define CTL_ESC CTL_T(KC_ESC)
 #define OSM_ALT OSM(MOD_LALT)
 #define OSM_SFT OSM(MOD_LSFT)
 #define OSM_GUI OSM(MOD_LGUI)
@@ -56,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      CTL_ESC,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,\
+      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, TD_CLRE,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -169,8 +168,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
   case CTL_ENT:
   case CTL_SPC:
     return 170;
-  case CTL_ESC:
-    return 120;
   // normal: 80
   default:
     return TAPPING_TERM;
