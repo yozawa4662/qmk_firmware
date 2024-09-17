@@ -22,11 +22,13 @@ enum custom_keycodes {
 };
 
 enum tap_dances {
-  CLRE_DANCE
+  ESRE_DANCE
 };
 
-void dance_CLRE_finished (tap_dance_state_t *state, void *user_data) {
+void dance_ESRE_finished (tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
+    tap_code(KC_ESC);
+  } else if (state->count == 2) {
     soft_reset_keyboard();
   } else {
     reset_keyboard();
@@ -36,7 +38,7 @@ void dance_CLRE_finished (tap_dance_state_t *state, void *user_data) {
 // All tap dance functions would go here. Only showing this one.
 tap_dance_action_t tap_dance_actions[] = {
   // double
-  [CLRE_DANCE] = ACTION_TAP_DANCE_FN_ADVANCED (NULL, dance_CLRE_finished, NULL)
+  [ESRE_DANCE] = ACTION_TAP_DANCE_FN (dance_ESRE_finished)
 };
 
 
@@ -48,7 +50,7 @@ tap_dance_action_t tap_dance_actions[] = {
 #define OSM_GUI OSM(MOD_LGUI)
 #define OSL_LOW OSL(_LOWER)
 #define OSL_RAI OSL(_RAISE)
-#define TD_CLRE TD(CLRE_DANCE)
+#define TD_ESRE TD(ESRE_DANCE)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
@@ -57,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, TD_CLRE,\
+      OSM_SFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, TD_ESRE,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           OSM_GUI, OSL_LOW, CTL_SPC,    CTL_ENT, OSL_RAI, OSM_ALT \
                                       //`--------------------------'  `--------------------------'
@@ -160,11 +162,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // TAPPING_TERM for each keycode
 // Tap Dances settings are in tap_dance_actions[]
-#define USUALLY_TD_TIME 200
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
   switch(keycode){
-  case TD_CLRE:
-    return USUALLY_TD_TIME;
+  case TD_ESRE:
+    return 150;
   case CTL_ENT:
   case CTL_SPC:
     return 170;
