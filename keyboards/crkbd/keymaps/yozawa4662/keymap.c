@@ -7,42 +7,43 @@ extern keymap_config_t keymap_config;
 extern rgblight_config_t rgblight_config;
 #endif
 
-// Each layer gets a name for readability, which is then used in the keymap matrix below.
-// The underscores don't mean anything - you can have a layer called STUFF or any other name.
-// Layer names don't all need to be of the same length, obviously, and you can also skip them
-// entirely and just use numbers.
+
+//
+// Layers
+//
 #define _QWERTY 0
 #define _LOWER 1
 #define _RAISE 2
 
-enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  LOWER,
-  RAISE
-};
 
+//
+// Tap dances
+//
 enum tap_dances {
   ESRE_DANCE
 };
 
 void dance_ESRE_finished (tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
+    // Once ESC
     tap_code(KC_ESC);
   } else if (state->count == 2) {
+    // Twice reset (not boot)
     soft_reset_keyboard();
   } else {
+    // Or more...
     reset_keyboard();
   }
 }
 
-// All tap dance functions would go here. Only showing this one.
 tap_dance_action_t tap_dance_actions[] = {
-  // double
   [ESRE_DANCE] = ACTION_TAP_DANCE_FN (dance_ESRE_finished)
 };
 
 
-// modifiers
+//
+// Custom modifiers
+//
 #define CTL_SPC CTL_T(KC_SPC)
 #define CTL_ENT RCTL_T(KC_ENT)
 #define OSM_ALT OSM(MOD_LALT)
@@ -52,6 +53,10 @@ tap_dance_action_t tap_dance_actions[] = {
 #define OSL_RAI OSL(_RAISE)
 #define TD_ESRE TD(ESRE_DANCE)
 
+
+//
+// Keymaps
+//
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -91,15 +96,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-void persistent_default_layer_set(uint16_t default_layer) {
-  eeconfig_update_default_layer(default_layer);
-  default_layer_set(default_layer);
-}
 
-//SSD1306 OLED update loop, make sure to add #define SSD1306OLED in config.h
+//
+// OLED
+//
 #ifdef SSD1306OLED
 
-// When add source files to SRC in rules.mk, you can use functions.
 const char *read_layer_state(void);
 void set_keylog(uint16_t keycode, keyrecord_t *record);
 const char *read_keylog(void);
@@ -150,18 +152,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     set_timelog();
 #endif
   }
-  switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        persistent_default_layer_set(1UL<<_QWERTY);
-      }
-      return false;
-  }
   return true;
 }
 
-// TAPPING_TERM for each keycode
-// Tap Dances settings are in tap_dance_actions[]
+
+//
+// Tapping terms
+//
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
   switch(keycode){
   case TD_ESRE:
