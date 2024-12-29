@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 
+#include "keymap_japanese.h"
 
 //
 // Layers
@@ -33,6 +34,14 @@ tap_dance_action_t tap_dance_actions[] = {
   [ESRE_DANCE] = ACTION_TAP_DANCE_FN (dance_ESRE_finished)
 };
 
+//
+// Custom keycodes
+//
+enum custom_keycodes {
+  TGL_IME = SAFE_RANGE,
+  BSLS
+};
+
 
 //
 // Custom modifiers
@@ -53,7 +62,7 @@ tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QWERTY] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,\
+       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -68,9 +77,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_ESC,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                      KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,    KC_0, KC_BSPC, \
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,                         KC_1,    KC_2,    KC_3,    KC_4,    KC_5, _______, \
+      _______, _______, _______, _______, _______, KC_LNG1,                         KC_1,    KC_2,    KC_3,    KC_4,    KC_5, _______, \
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_F19,  KC_F20,  KC_F21,  KC_F22,  KC_F23,  KC_F24,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______, \
+      _______, _______, _______, _______, _______, KC_LNG2,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______, \
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______ \
                                       //`--------------------------'  `--------------------------'
@@ -80,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_ESC, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC,  KC_GRV, KC_BSLS, \
+        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC,  KC_GRV,    BSLS, \
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
         KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_TILD, _______,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -136,16 +145,35 @@ bool shutdown_user(bool jump_to_bootloader) {
 }
 #endif//SSD1306OLED
 
+uint16_t ime_state = KC_LNG1;
+uint16_t toggle_ime_state(void) {
+  if (ime_state == KC_LNG1) {
+    ime_state = KC_LNG2;
+    return KC_LNG2;
+  } else {
+    ime_state = KC_LNG1;
+    return KC_LNG1;
+  }
+}
+
+bool twpair_on_jis(uint16_t keycode, keyrecord_t *record);
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
 #ifdef SSD1306OLED
     set_keylog(keycode, record);
     set_timelog();
 #endif
+    switch(keycode) {
+    case TGL_IME:
+      register_code(toggle_ime_state());
+      return false;
+    case BSLS:
+      register_code(KC_INT1);
+      return false;
+    }
   }
-  return true;
+  return twpair_on_jis(keycode, record);
 }
-
 
 //
 // Tapping terms
@@ -162,3 +190,39 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record){
     return TAPPING_TERM;
   }
 }
+
+
+//
+// Key overrides
+//
+
+// Ctrl-Space treated as KC_LNG5
+const key_override_t zenkaku_hankaku_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_SPC, TGL_IME);
+// Ctrl-H treated as KC_BSPC
+const key_override_t backspace_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_H, KC_BSPC);
+// Ctrl-D treated as Delete
+const key_override_t delete_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_D, KC_DEL);
+// Ctrl-A treated as Home
+const key_override_t home_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_A, KC_HOME);
+// Ctrl-E treated as End
+const key_override_t end_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_E, KC_END);
+// Ctrl-F treated as Right
+const key_override_t right_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_F, KC_RGHT);
+// Ctrl-B treated as Left
+const key_override_t left_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_B, KC_LEFT);
+// Ctrl-N treated as Down
+const key_override_t down_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_N, KC_DOWN);
+// Ctrl-P treated as Up
+const key_override_t up_override = ko_make_basic(MOD_BIT(KC_LCTL), KC_P, KC_UP);
+
+const key_override_t *key_overrides[] = {
+  &zenkaku_hankaku_override,
+  &backspace_override,
+  &delete_override,
+  &home_override,
+  &end_override,
+  &right_override,
+  &left_override,
+  &down_override,
+  &up_override
+};
